@@ -7,13 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ChartPieLegend } from "@/components/dashboard/pie-chart-legend";
 
 export default function Page() {
   return (
-    <div className="flex flex-col min-h-screen md:h-screen w-full">
-      <div className="flex flex-col md:flex-row md:h-[30%] gap-4">
+    <div className="flex flex-col min-h-screen md:h-screen w-full gap-4">
+      <div className="flex flex-col md:flex-row md:h-[50%]  gap-4">
         <div className="h-32 md:h-full flex-1">
-          <Card className="w-full max-w-lg [--card-spacing:--spacing(6)]">
+          <Card className="w-full max-w-full [--card-spacing:--spacing(6)] ">
             <CardHeader className="flex flex-col">
               <div className="flex items-center justify-between w-full">
                 <CardTitle className="text-xs sm:text-[12px] md:text-[10px] lg:text-sm text-muted-foreground">
@@ -39,7 +40,7 @@ export default function Page() {
           </Card>
         </div>
         <div className="h-32 md:h-full flex-1">
-          <Card className="w-full max-w-lg [--card-spacing:--spacing(6)]">
+          <Card className="w-full max-w-full [--card-spacing:--spacing(6)]">
             <CardHeader className="flex flex-col">
               <div className="flex items-center justify-between w-full">
                 <CardTitle className="text-xs sm:text-[12px] md:text-[10px] lg:text-sm text-muted-foreground">
@@ -64,8 +65,11 @@ export default function Page() {
             </CardHeader>
           </Card>
         </div>{" "}
-        <div className="h-32 md:h-full flex-1">
-          <Card className="w-full max-w-lg [--card-spacing:--spacing(6)]">
+        <div className="h-32 md:h-full flex-1 flex justify-center items-center">
+          <ChartPieLegend />
+        </div>
+        <div className="h-32 md:-full flex-1 w-full">
+          <Card className="w-full max-w-full [--card-spacing:--spacing(6)]">
             <CardHeader className="flex flex-col">
               <div className="flex items-center justify-between w-full">
                 <CardTitle className="text-xs sm:text-[12px] md:text-[10px] lg:text-sm text-muted-foreground">
@@ -90,15 +94,9 @@ export default function Page() {
             </CardHeader>
           </Card>
         </div>
-        {/* <div className="h-32 md:h-full flex-1 bg-emerald-500 flex items-center justify-center text-white font-bold rounded">
-          Lil Chunk 2
-        </div>
-        <div className="h-32 md:h-full flex-1 bg-emerald-500 flex items-center justify-center text-white font-bold rounded">
-          Lil Chunk 3
-        </div> */}
       </div>
 
-      <div className="w-full md:h-[70%]">
+      <div className="w-full md:h-[50%]">
         <ChartAreaInteractive />
       </div>
     </div>

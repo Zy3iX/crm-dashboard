@@ -24,6 +24,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 type AppPath = `/${string}`;
 
@@ -35,34 +37,34 @@ type NavigationTypes = {
 
 const mainNavigation: NavigationTypes[] = [
   {
-    title: "Analytics",
+    title: "Dashboard",
     icon: ChartColumn,
-    url: "/analytics",
+    url: "/dashboard",
   },
   {
     title: "Tours",
     icon: Compass,
-    url: "/tours",
+    url: "/dashboard/tours",
   },
   {
     title: "Bookings",
     icon: CalendarDays,
-    url: "/bookings",
+    url: "/dashboard/bookings",
   },
   {
     title: "Clients",
     icon: Users,
-    url: "/clients",
+    url: "/dashboard/clients",
   },
   {
     title: "Guides",
     icon: UserRound,
-    url: "/guides",
+    url: "/dashboard/guides",
   },
   {
     title: "Reviews",
     icon: MessageCircleMore,
-    url: "/reviews",
+    url: "/dashboard/reviews",
   },
 ];
 
@@ -70,26 +72,32 @@ const managementNavigation: NavigationTypes[] = [
   {
     title: "Destinations",
     icon: Map,
-    url: "/destinations",
+    url: "/dashboard/destinations",
   },
   {
     title: "Payments",
     icon: CircleDollarSign,
-    url: "/payments",
+    url: "/dashboard/payments",
   },
   {
     title: "Invoices",
     icon: FileText,
-    url: "/invoices",
+    url: "/dashboard/invoices",
   },
   {
     title: "Messages",
     icon: MessageSquare,
-    url: "/messages",
+    url: "/dashboard/messages",
   },
 ];
 
 export default function AppSidebar() {
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
   return (
     <Sidebar side="left" variant="sidebar" collapsible="icon">
       <SidebarHeader className="border-b">
@@ -123,7 +131,7 @@ export default function AppSidebar() {
                 <SidebarMenuItem key={option.title}>
                   <SidebarMenuButton
                     render={<a href={option.url} />}
-                    isActive={i === 0}
+                    isActive={isActive(option.url)}
                     tooltip={option.title}
                   >
                     <option.icon />
