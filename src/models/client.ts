@@ -12,10 +12,9 @@ const clientSchema = new mongoose.Schema<ClientType>(
       required: true,
       enum: ["English", "Russian", "Chinese"],
     },
-    fromCountry: { type: String, required: false },
-    notes: { type: String, required: false },
-    birthDate: { type: Date, required: false },
-    gender: { type: String, enum: ["Male", "Female"], required: true },
+    fromCountry: { type: String, required: true, default: "Kazakhstan" },
+    notes: { type: String, required: true, default: null },
+    birthDate: { type: Date, required: true, default: null },
     status: {
       type: String,
       enum: ["New", "Contacted", "Customer", "Lost", "Qualified"],
@@ -35,7 +34,7 @@ const clientSchema = new mongoose.Schema<ClientType>(
       required: true,
       default: "Website",
     },
-    activeManager: { type: String, required: false, default: null },
+    activeManager: { type: String, required: true, default: null },
   },
   { timestamps: true },
 );

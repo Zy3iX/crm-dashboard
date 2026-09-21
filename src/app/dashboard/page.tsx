@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChartPieLegend } from "@/components/dashboard/pie-chart-legend";
+import { SectionCards } from "@/components/section-cards";
 
 export default function Page() {
   return (

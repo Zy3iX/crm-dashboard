@@ -5,10 +5,9 @@ type ClientType = {
   email?: string;
   phone: string;
   preferredLanguage: string;
-  fromCountry?: string;
-  notes?: string;
-  birthDate?: Date;
-  gender: "Male" | "Female";
+  fromCountry: string;
+  notes: string;
+  birthDate: Date;
   status: "New" | "Contacted" | "Customer" | "Lost" | "Qualified";
   source:
     | "Instagram"
@@ -17,9 +16,7 @@ type ClientType = {
     | "Website"
     | "Referral"
     | "Other";
-  activeManager?: string | null;
+  activeManager: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
-
-
