@@ -6,19 +6,37 @@ export async function GET() {
   try {
     await dbConnect();
 
-    const pastYear = new Date();
-    pastYear.setFullYear(pastYear.getFullYear() - 1);
+    const pastYearDate = new Date();
+    pastYearDate.setFullYear(pastYearDate.getFullYear() - 1);
 
     const [
       totalClients,
-      newThisYear,
+      listedClientsByYear,
       qualifiedLeads,
       customers,
       statusRows,
       recentRows,
     ] = await Promise.all([
       Client.countDocuments(),
-      Client.find({ createdAt: { $gte: pastYear } }),
+      Client.aggregate([
+        {
+          $match: { createdAt: { $gte: pastYearDate } },
+        },
+        {
+          $group: {
+            _id: {
+              $dateToString: {
+                format: "%Y-%m",
+                date: "$createdAt",
+              },
+            },
+            clientCount: { $sum: 1 },
+          },
+        },
+        {
+          $sort: { _id: 1 },
+        },
+      ]),
       Client.countDocuments({
         status: { $in: ["New", "Contacted", "Qualified"] },
       }),
@@ -31,8 +49,8 @@ export async function GET() {
         .lean(),
     ]);
 
-    const buildedClientsByMonth = (newThisYear: ClientType[]) => {
-      const monthsList = Array.from({ length: 12 }, (_, i) => {
+    const buildFullMonthsList = (listedClientsByYear: listedClientsByYear) => {
+      const clientsPerMonthsList = Array.from({ length: 12 }, (month, i) => {
         const d = new Date(
           Date.UTC(
             new Date().getUTCFullYear(),
@@ -41,33 +59,29 @@ export async function GET() {
           ),
         );
         return {
-          key: `${d.getUTCFullYear()}-${d.getUTCMonth()}`,
+          key: `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`,
           year: d.getUTCFullYear(),
-          month: d.toLocaleString("en-US", {
+          monthName: d.toLocaleString("en-US", {
             month: "long",
-            timeZone: "UTC",
           }),
           clientCount: 0,
         };
       });
 
-      const byKey = new Map(monthsList.map((month) => [month.key, month]));
-
-      newThisYear.forEach((client: ClientType) => {
-        const d = new Date(client.createdAt);
-        const clientKey = byKey.get(`${d.getUTCFullYear()}-${d.getUTCMonth()}`);
-
-        if (clientKey) {
-          clientKey.clientCount++;
-        }
+      listedClientsByYear.forEach((listedMonth) => {
+        const month = clientsPerMonthsList.find((m) => {
+          return m.key === listedMonth._id;
+        });
+        if (month) month.clientCount = listedMonth.clientCount;
       });
 
-      return monthsList;
+      return clientsPerMonthsList;
     };
 
     const statusCounts = Object.fromEntries(
       statusRows.map(({ _id, count }) => [_id, count]),
     );
+
     const recentClients = recentRows.map((client) => ({
       ...client,
       _id: client._id.toString(),
@@ -75,16 +89,15 @@ export async function GET() {
 
     return NextResponse.json({
       totalClients,
-      newThisYear,
+      buildedFullMonthsList: buildFullMonthsList(listedClientsByYear),
       qualifiedLeads,
       customers,
       statusCounts,
       recentClients,
-      buildedClientsByMonth: buildedClientsByMonth(newThisYear),
     });
-  } catch {
+  } catch (e) {
     return NextResponse.json(
-      { error: "Unable to load dashboard summary." },
+      { error: "Unable to load dashboard summary.", e },
       { status: 500 },
     );
   }

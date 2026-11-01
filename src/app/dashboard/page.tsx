@@ -19,7 +19,7 @@ type DashboardSummary = {
   customers: number;
   statusCounts: Record<string, number>;
   newThisYear: [];
-  buildedClientsByMonth: [];
+  buildedFullMonthsList: [];
   recentClients: {
     _id: string;
     firstName: string;
@@ -133,7 +133,7 @@ export default function Page() {
 
 
         <section className="space-y-4">
-          <ChartAreaLinear buildedClientsByMonth={data?.buildedClientsByMonth ?? []} />
+          <ChartAreaLinear buildedFullMonthsList={data?.buildedFullMonthsList ?? []} />
         </section>
       </div>
     </div>
