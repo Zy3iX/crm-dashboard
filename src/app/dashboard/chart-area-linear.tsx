@@ -156,9 +156,9 @@ export function ChartAreaLinear({
 
   return (
     <Card>
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-3 sm:flex-row">
         <div className="grid flex-1 gap-1">
-          <CardTitle>Total clients by chosen period.</CardTitle>
+          <CardTitle className="text-lg font-semibold">Total clients by chosen period.</CardTitle>
           <CardDescription>
             This data chart shows clients by each month of the last year.
           </CardDescription>
